@@ -18,42 +18,103 @@ const theme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: "#1976d2",
-      light: "#42a5f5",
-      dark: "#1565c0",
+      main: "#2563eb", // Modern blue
+      light: "#60a5fa",
+      dark: "#1d4ed8",
+    },
+    secondary: {
+      main: "#ec4899", // Modern pink
+      light: "#f472b6",
+      dark: "#db2777",
     },
     background: {
       default: "#f8fafc",
       paper: "#ffffff",
     },
+    text: {
+      primary: "#0f172a",
+      secondary: "#475569",
+    },
+    divider: "#e2e8f0",
   },
   typography: {
+    fontFamily:
+      "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     h4: {
-      fontWeight: 700,
+      fontWeight: 800,
       letterSpacing: "-0.5px",
+      background: "linear-gradient(to right, #2563eb, #60a5fa)",
+      WebkitBackgroundClip: "text",
+      WebkitTextFillColor: "transparent",
     },
     h6: {
       fontWeight: 600,
+      letterSpacing: "-0.25px",
+    },
+    button: {
+      fontWeight: 600,
+      letterSpacing: "0.025em",
+    },
+    body1: {
+      letterSpacing: "-0.025em",
+    },
+    body2: {
+      letterSpacing: "-0.025em",
     },
   },
   shape: {
-    borderRadius: 12,
+    borderRadius: 16,
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
+          borderRadius: 12,
           textTransform: "none",
           fontWeight: 600,
-          padding: "8px 16px",
+          padding: "10px 20px",
+          boxShadow: "none",
+          "&:hover": {
+            boxShadow: "0 4px 12px rgba(37, 99, 235, 0.15)",
+          },
+        },
+        containedPrimary: {
+          background: "linear-gradient(45deg, #2563eb, #60a5fa)",
+          "&:hover": {
+            background: "linear-gradient(45deg, #1d4ed8, #3b82f6)",
+          },
         },
       },
     },
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 16,
+          borderRadius: 20,
+          boxShadow:
+            "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05)",
+          "&:hover": {
+            boxShadow:
+              "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05)",
+          },
+        },
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          "&:hover": {
+            backgroundColor: "rgba(37, 99, 235, 0.08)",
+          },
+        },
+      },
+    },
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          "@media (min-width: 600px)": {
+            paddingLeft: 32,
+            paddingRight: 32,
+          },
         },
       },
     },
@@ -98,39 +159,64 @@ function App() {
       <Container maxWidth="md">
         <Box py={6}>
           <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            mb={6}
             sx={{
-              background: (theme) =>
-                `linear-gradient(145deg, ${theme.palette.primary.light}, ${theme.palette.primary.main})`,
-              borderRadius: 4,
-              p: 4,
-              color: "white",
-              boxShadow: 2,
+              mb: { xs: 4, md: 6 },
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
+              justifyContent: "space-between",
+              alignItems: { xs: "stretch", sm: "center" },
+              gap: 3,
+              position: "relative",
+              "&::before": {
+                content: '""',
+                position: "absolute",
+                top: -24,
+                left: -24,
+                right: -24,
+                bottom: -24,
+                background:
+                  "radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 70%)",
+                zIndex: -1,
+                borderRadius: 4,
+              },
             }}
           >
-            <Typography variant="h4" component="h1" sx={{ color: "white" }}>
-              My Loyalty Cards
-            </Typography>
+            <Box>
+              <Typography variant="h4" component="h1" gutterBottom>
+                My Loyalty Cards
+              </Typography>
+              <Typography
+                variant="body1"
+                color="text.secondary"
+                sx={{ maxWidth: 500 }}
+              >
+                Keep all your loyalty cards in one place, easily accessible
+                whenever you need them.
+              </Typography>
+            </Box>
             <Button
               variant="contained"
               startIcon={<AddIcon />}
               onClick={() => setIsAddFormOpen(true)}
               sx={{
-                bgcolor: "white",
-                color: "primary.main",
-                "&:hover": {
-                  bgcolor: "rgba(255, 255, 255, 0.9)",
-                },
+                minWidth: { xs: "100%", sm: "auto" },
+                py: 1.5,
               }}
             >
-              Add Card
+              Add New Card
             </Button>
           </Box>
 
-          <Box sx={{ display: "grid", gap: 2 }}>
+          <Box
+            sx={{
+              display: "grid",
+              gap: 3,
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm: "repeat(auto-fill, minmax(280px, 1fr))",
+              },
+            }}
+          >
             {cards.map((card) => (
               <CardItem
                 key={card.id}
@@ -145,21 +231,57 @@ function App() {
             <Box
               sx={{
                 textAlign: "center",
-                py: 8,
-                px: 2,
+                py: 10,
+                px: 4,
                 bgcolor: "background.paper",
                 borderRadius: 4,
                 border: "2px dashed",
-                borderColor: "divider",
+                borderColor: "primary.light",
                 mt: 4,
+                position: "relative",
+                overflow: "hidden",
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background:
+                    "radial-gradient(circle at center, rgba(96, 165, 250, 0.08), transparent 70%)",
+                  zIndex: 0,
+                },
               }}
             >
-              <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>
-                No loyalty cards yet
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Click "Add Card" to get started with your first loyalty card.
-              </Typography>
+              <Box position="relative" zIndex={1}>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    mb: 2,
+                    background: "linear-gradient(45deg, #2563eb, #60a5fa)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    fontWeight: 700,
+                  }}
+                >
+                  No loyalty cards yet
+                </Typography>
+                <Typography
+                  variant="body1"
+                  color="text.secondary"
+                  sx={{ mb: 4 }}
+                >
+                  Add your first loyalty card to get started.
+                </Typography>
+                <Button
+                  variant="contained"
+                  startIcon={<AddIcon />}
+                  onClick={() => setIsAddFormOpen(true)}
+                  sx={{ py: 1.5 }}
+                >
+                  Add Your First Card
+                </Button>
+              </Box>
             </Box>
           )}
         </Box>
