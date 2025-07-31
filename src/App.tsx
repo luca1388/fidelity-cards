@@ -18,70 +18,66 @@ const theme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: "#2563eb", // Modern blue
-      light: "#60a5fa",
-      dark: "#1d4ed8",
-    },
-    secondary: {
-      main: "#ec4899", // Modern pink
-      light: "#f472b6",
-      dark: "#db2777",
+      main: "#000000",
+      light: "#333333",
+      dark: "#000000",
     },
     background: {
-      default: "#f8fafc",
+      default: "#ffffff",
       paper: "#ffffff",
     },
     text: {
-      primary: "#0f172a",
-      secondary: "#475569",
+      primary: "#000000",
+      secondary: "#666666",
     },
-    divider: "#e2e8f0",
   },
   typography: {
     fontFamily:
-      "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+      "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
     h4: {
-      fontWeight: 800,
-      letterSpacing: "-0.5px",
-      background: "linear-gradient(to right, #2563eb, #60a5fa)",
-      WebkitBackgroundClip: "text",
-      WebkitTextFillColor: "transparent",
+      fontSize: "24px",
+      fontWeight: 600,
+      color: "#000000",
     },
     h6: {
-      fontWeight: 600,
-      letterSpacing: "-0.25px",
-    },
-    button: {
-      fontWeight: 600,
-      letterSpacing: "0.025em",
+      fontSize: "16px",
+      fontWeight: 500,
     },
     body1: {
-      letterSpacing: "-0.025em",
+      fontSize: "16px",
     },
     body2: {
-      letterSpacing: "-0.025em",
+      fontSize: "14px",
+      color: "#666666",
     },
-  },
-  shape: {
-    borderRadius: 16,
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 12,
           textTransform: "none",
-          fontWeight: 600,
-          padding: "10px 20px",
+          borderRadius: 8,
+          fontWeight: 500,
+          fontSize: "14px",
+          padding: "8px 16px",
           boxShadow: "none",
           "&:hover": {
-            boxShadow: "0 4px 12px rgba(37, 99, 235, 0.15)",
+            boxShadow: "none",
           },
         },
-        containedPrimary: {
-          background: "linear-gradient(45deg, #2563eb, #60a5fa)",
+        contained: {
+          backgroundColor: "#000",
+          color: "#fff",
           "&:hover": {
-            background: "linear-gradient(45deg, #1d4ed8, #3b82f6)",
+            backgroundColor: "#333",
+          },
+        },
+        outlined: {
+          borderColor: "#e0e0e0",
+          color: "#000",
+          "&:hover": {
+            backgroundColor: "#f5f5f5",
+            borderColor: "#e0e0e0",
           },
         },
       },
@@ -89,12 +85,11 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 20,
-          boxShadow:
-            "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05)",
+          boxShadow: "none",
+          border: "1px solid #e0e0e0",
+          borderRadius: 8,
           "&:hover": {
-            boxShadow:
-              "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05)",
+            borderColor: "#000000",
           },
         },
       },
@@ -156,52 +151,27 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Container maxWidth="md">
-        <Box py={6}>
+      <Container maxWidth="sm">
+        <Box py={4}>
           <Box
             sx={{
-              mb: { xs: 4, md: 6 },
+              mb: 3,
               display: "flex",
-              flexDirection: { xs: "column", sm: "row" },
-              justifyContent: "space-between",
-              alignItems: { xs: "stretch", sm: "center" },
-              gap: 3,
-              position: "relative",
-              "&::before": {
-                content: '""',
-                position: "absolute",
-                top: -24,
-                left: -24,
-                right: -24,
-                bottom: -24,
-                background:
-                  "radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 70%)",
-                zIndex: -1,
-                borderRadius: 4,
-              },
+              flexDirection: "column",
+              gap: 2,
             }}
           >
-            <Box>
-              <Typography variant="h4" component="h1" gutterBottom>
-                My Loyalty Cards
-              </Typography>
-              <Typography
-                variant="body1"
-                color="text.secondary"
-                sx={{ maxWidth: 500 }}
-              >
-                Keep all your loyalty cards in one place, easily accessible
-                whenever you need them.
-              </Typography>
-            </Box>
+            <Typography variant="h4" component="h1">
+              My Fidelity Cards
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              This is the list of your cards!
+            </Typography>
             <Button
               variant="contained"
               startIcon={<AddIcon />}
               onClick={() => setIsAddFormOpen(true)}
-              sx={{
-                minWidth: { xs: "100%", sm: "auto" },
-                py: 1.5,
-              }}
+              sx={{ alignSelf: "flex-start" }}
             >
               Add New Card
             </Button>

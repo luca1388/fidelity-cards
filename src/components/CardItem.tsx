@@ -1,16 +1,22 @@
-import {
-  Card,
-  CardContent,
-  Typography,
-  IconButton,
-  Box,
-  Paper,
-} from "@mui/material";
-import {
-  Delete as DeleteIcon,
-  CreditCard as CardIcon,
-} from "@mui/icons-material";
+import { Card, CardContent, Typography, IconButton, Box } from "@mui/material";
+import { Delete as DeleteIcon } from "@mui/icons-material";
 import type { LoyaltyCard } from "../types/types";
+
+const generateColorFromString = (str: string) => {
+  // Generate a hash from the string
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+
+  // Use the hash to generate HSL values
+  const hue = Math.abs(hash % 360); // 0-360 degrees
+  const saturation = 65 + Math.abs((hash >> 8) % 20); // 65-85%
+  const lightness = 45 + Math.abs((hash >> 16) % 10); // 45-55%
+
+  return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+};
 
 interface CardItemProps {
   card: LoyaltyCard;
@@ -21,67 +27,65 @@ interface CardItemProps {
 export const CardItem = ({ card, onDelete, onClick }: CardItemProps) => {
   return (
     <Card
-      component={Paper}
-      elevation={2}
       sx={{
         cursor: "pointer",
-        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-        borderRadius: 3,
-        background: (theme) =>
-          `linear-gradient(145deg, ${theme.palette.background.paper} 0%, ${theme.palette.background.default} 100%)`,
-        "&:hover": {
-          transform: "translateY(-4px) scale(1.01)",
-          boxShadow: (theme) =>
-            `0 12px 24px -8px ${theme.palette.primary.main}20`,
-        },
+        transition: "all 0.2s ease",
+        border: "1px solid #e0e0e0",
+        borderRadius: 2,
+        boxShadow: "none",
         position: "relative",
-        overflow: "hidden",
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "4px",
+          backgroundColor: generateColorFromString(card.storeName),
+          borderTopLeftRadius: 8,
+          borderTopRightRadius: 8,
+        },
+        "&:hover": {
+          borderColor: "#e0e0e0",
+          transform: "translateY(-1px)",
+          boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+        },
       }}
       onClick={onClick}
     >
-      <CardContent
-        sx={{
-          p: 3,
-          "&:last-child": { pb: 3 },
-        }}
-      >
+      <CardContent sx={{ p: 2, pt: 3 }}>
         <Box
           display="flex"
           justifyContent="space-between"
-          alignItems="flex-start"
+          alignItems="center"
           gap={2}
         >
-          <Box display="flex" gap={3} alignItems="center" flex={1}>
+          <Box display="flex" gap={2} alignItems="center">
             <Box
               sx={{
-                background: (theme) =>
-                  `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
-                borderRadius: 3,
-                p: 1.5,
+                width: 42,
+                height: 42,
+                borderRadius: 1.5,
+                backgroundColor: "#f5f5f5",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                boxShadow: "0 8px 16px -4px rgba(37, 99, 235, 0.2)",
-                transition: "all 0.2s ease-in-out",
-                "&:hover": {
-                  transform: "scale(1.05) rotate(-5deg)",
-                },
+                color: "#000",
+                fontSize: "18px",
+                fontWeight: 600,
+                border: "1px solid #eee",
               }}
             >
-              <CardIcon sx={{ color: "white", fontSize: 28 }} />
+              {card.storeName.charAt(0).toUpperCase()}
             </Box>
             <Box>
               <Typography
-                variant="h6"
-                component="div"
+                variant="subtitle1"
                 sx={{
-                  fontWeight: 700,
-                  mb: 1,
-                  color: "text.primary",
-                  transition: "color 0.2s ease",
-                  "&:hover": {
-                    color: "primary.main",
-                  },
+                  fontWeight: 600,
+                  color: "#000",
+                  fontSize: "0.95rem",
+                  mb: 0.5,
                 }}
               >
                 {card.storeName}
@@ -89,12 +93,10 @@ export const CardItem = ({ card, onDelete, onClick }: CardItemProps) => {
               <Typography
                 variant="body2"
                 sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 0.5,
-                  color: "text.secondary",
+                  color: "#666",
                   fontFamily: "monospace",
-                  letterSpacing: "0.1em",
+                  fontSize: "0.85rem",
+                  letterSpacing: "0.5px",
                 }}
               >
                 {card.cardNumber}
@@ -108,17 +110,14 @@ export const CardItem = ({ card, onDelete, onClick }: CardItemProps) => {
             }}
             size="small"
             sx={{
-              opacity: 0.5,
-              transition: "all 0.2s ease",
+              color: "#999",
               "&:hover": {
-                opacity: 1,
-                color: "error.main",
-                transform: "scale(1.1)",
-                bgcolor: "error.light",
+                color: "#000",
+                backgroundColor: "transparent",
               },
             }}
           >
-            <DeleteIcon fontSize="small" sx={{ color: "inherit" }} />
+            <DeleteIcon fontSize="small" />
           </IconButton>
         </Box>
       </CardContent>
