@@ -9,9 +9,7 @@ import {
 import Barcode from "react-barcode";
 import {
   Close as CloseIcon,
-  LightMode as LightModeIcon,
   ContentCopy as ContentCopyIcon,
-  Store as StoreIcon,
 } from "@mui/icons-material";
 import type { LoyaltyCard } from "../types/types";
 
