@@ -4,10 +4,12 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Stack,
   TextField,
 } from "@mui/material";
 import { useState } from "react";
 import type { LoyaltyCard } from "../types/types";
+import BarcodeScanner from "./Scanner";
 
 interface AddCardFormProps {
   open: boolean;
@@ -32,8 +34,15 @@ export const AddCardForm = ({ open, onClose, onAdd }: AddCardFormProps) => {
     }
   };
 
+  const onScanSuccess = (decodedText: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      cardNumber: decodedText,
+    }));
+  };
+
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>Add New Loyalty Card</DialogTitle>
       <DialogContent>
         <TextField
@@ -46,15 +55,21 @@ export const AddCardForm = ({ open, onClose, onAdd }: AddCardFormProps) => {
             setFormData({ ...formData, storeName: e.target.value })
           }
         />
-        <TextField
-          margin="dense"
-          label="Card Number"
-          fullWidth
-          value={formData.cardNumber}
-          onChange={(e) =>
-            setFormData({ ...formData, cardNumber: e.target.value })
-          }
-        />
+        <Stack spacing={2}>
+          <TextField
+            margin="dense"
+            label="Card Number"
+            fullWidth
+            value={formData.cardNumber}
+            onChange={(e) =>
+              setFormData({ ...formData, cardNumber: e.target.value })
+            }
+          />
+          <BarcodeScanner onSuccess={onScanSuccess} />
+          <div className="barcode-scanner">
+            <div id="reader"></div>
+          </div>
+        </Stack>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
