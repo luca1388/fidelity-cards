@@ -42,8 +42,9 @@ export default function BarcodeScanner({
             onSuccess(decodedText);
             stopScanner(); // ferma lo scanner
           },
-          (error) => {
+          (_error) => {
             // console.warn("Errore di scansione:", error);
+            console.warn("Errore di scansione", _error);
           }
         );
 
