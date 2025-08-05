@@ -1,9 +1,13 @@
 import {
+  Alert,
+  Box,
   Button,
+  Container,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  Snackbar,
   Stack,
   TextField,
 } from "@mui/material";
@@ -22,6 +26,7 @@ export const AddCardForm = ({ open, onClose, onAdd }: AddCardFormProps) => {
     storeName: "",
     cardNumber: "",
   });
+  const [showError, setShowError] = useState(false);
 
   const handleSubmit = () => {
     if (formData.storeName && formData.cardNumber) {
@@ -31,6 +36,8 @@ export const AddCardForm = ({ open, onClose, onAdd }: AddCardFormProps) => {
       });
       setFormData({ storeName: "", cardNumber: "" });
       onClose();
+    } else {
+      setShowError(true);
     }
   };
 
@@ -45,17 +52,17 @@ export const AddCardForm = ({ open, onClose, onAdd }: AddCardFormProps) => {
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>Add New Loyalty Card</DialogTitle>
       <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          label="Store Name"
-          fullWidth
-          value={formData.storeName}
-          onChange={(e) =>
-            setFormData({ ...formData, storeName: e.target.value })
-          }
-        />
-        <Stack spacing={2}>
+        <Stack spacing={2} justifyContent="center" marginTop="8px">
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Store Name"
+            fullWidth
+            value={formData.storeName}
+            onChange={(e) =>
+              setFormData({ ...formData, storeName: e.target.value })
+            }
+          />
           <TextField
             margin="dense"
             label="Card Number"
@@ -66,9 +73,6 @@ export const AddCardForm = ({ open, onClose, onAdd }: AddCardFormProps) => {
             }
           />
           <BarcodeScanner onSuccess={onScanSuccess} />
-          <div className="barcode-scanner">
-            <div id="reader"></div>
-          </div>
         </Stack>
       </DialogContent>
       <DialogActions>
@@ -77,6 +81,17 @@ export const AddCardForm = ({ open, onClose, onAdd }: AddCardFormProps) => {
           Add Card
         </Button>
       </DialogActions>
+
+      <Snackbar
+        open={showError}
+        autoHideDuration={3000}
+        onClose={() => setShowError(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert severity="error" onClose={() => setShowError(false)}>
+          Inserisci i dati della tessera prima di procedere.
+        </Alert>
+      </Snackbar>
     </Dialog>
   );
 };

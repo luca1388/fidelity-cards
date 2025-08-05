@@ -4,7 +4,7 @@ import {
   Html5QrcodeSupportedFormats,
   type CameraDevice,
 } from "html5-qrcode";
-import { Button } from "@mui/material";
+import { Button, Container } from "@mui/material";
 import ScannerIcon from "@mui/icons-material/CenterFocusWeak";
 
 const SCANNER_ID = "custom-html5-qrcode";
@@ -53,7 +53,6 @@ export default function BarcodeScanner({
             stopScanner(); // ferma lo scanner
           },
           (_error) => {
-            // console.warn("Errore di scansione:", error);
             console.warn("Errore di scansione", _error);
           }
         );
@@ -98,7 +97,22 @@ export default function BarcodeScanner({
         {scanning ? "Ferma Scansione" : "Scansiona Tessera"}
       </Button>
 
-      <div id={SCANNER_ID} style={{ width: "100%", maxWidth: 400 }} />
+      <Container
+        maxWidth="sm"
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <div
+          id={SCANNER_ID}
+          style={{
+            width: "100%",
+            maxWidth: 400,
+          }}
+        />
+      </Container>
     </>
   );
   //   return (
