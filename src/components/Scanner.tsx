@@ -1,9 +1,19 @@
 import { useEffect, useRef, useState } from "react";
-import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
+import {
+  Html5Qrcode,
+  Html5QrcodeSupportedFormats,
+  type CameraDevice,
+} from "html5-qrcode";
 import { Button } from "@mui/material";
 import ScannerIcon from "@mui/icons-material/CenterFocusWeak";
 
 const SCANNER_ID = "custom-html5-qrcode";
+
+const findBackCamera = (devices: CameraDevice[]) => {
+  // Cerca per nome
+  const backCam = devices.find((d) => /back|rear|environment/i.test(d.label));
+  return backCam?.id || devices[1]?.id; // fallback alla seconda disponibile
+};
 
 export default function BarcodeScanner({
   onSuccess,
@@ -32,7 +42,7 @@ export default function BarcodeScanner({
 
       const devices = await Html5Qrcode.getCameras();
       if (devices && devices.length) {
-        const cameraId = devices[0].id;
+        const cameraId = findBackCamera(devices) || devices[0].id;
 
         await html5QrCode.start(
           cameraId,
