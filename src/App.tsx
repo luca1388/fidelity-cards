@@ -13,6 +13,7 @@ import type { LoyaltyCard } from "./types/types";
 import { AddCardForm } from "./components/AddCardForm";
 import { CardItem } from "./components/CardItem";
 import { CardDetails } from "./components/CardDetails";
+import { stores } from "./utils/stores";
 
 const theme = createTheme({
   palette: {
@@ -141,7 +142,19 @@ function App() {
   }, [cards]);
 
   const handleAddCard = (newCard: LoyaltyCard) => {
-    setCards([...cards, newCard]);
+    const matchedStore = stores.find(
+      (store) => store.name.toLowerCase() === newCard.storeName.toLowerCase()
+    );
+
+    const enrichedCard: LoyaltyCard = {
+      ...newCard,
+      category: matchedStore?.category,
+      accentColor: matchedStore?.accentColor,
+      image: matchedStore?.image,
+      storeDisplayName: matchedStore?.displayName || newCard.storeName,
+    };
+
+    setCards([...cards, enrichedCard || newCard]);
   };
 
   const handleDeleteCard = (id: string) => {

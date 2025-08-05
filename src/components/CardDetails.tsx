@@ -92,7 +92,7 @@ export const CardDetails = ({ card, onClose }: CardDetailsProps) => {
                 fontSize: "1.1rem",
               }}
             >
-              {card.storeName}
+              {card.storeDisplayName || card.storeName}
             </Typography>
             <IconButton
               onClick={onClose}

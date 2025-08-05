@@ -22,6 +22,7 @@ interface AddCardFormProps {
 export const AddCardForm = ({ open, onClose, onAdd }: AddCardFormProps) => {
   const [formData, setFormData] = useState({
     storeName: "",
+    storeDisplayName: "",
     cardNumber: "",
   });
   const [showError, setShowError] = useState(false);
@@ -32,7 +33,7 @@ export const AddCardForm = ({ open, onClose, onAdd }: AddCardFormProps) => {
         id: Date.now().toString(),
         ...formData,
       });
-      setFormData({ storeName: "", cardNumber: "" });
+      setFormData({ storeName: "", cardNumber: "", storeDisplayName: "" });
       onClose();
     } else {
       setShowError(true);
@@ -58,7 +59,11 @@ export const AddCardForm = ({ open, onClose, onAdd }: AddCardFormProps) => {
             fullWidth
             value={formData.storeName}
             onChange={(e) =>
-              setFormData({ ...formData, storeName: e.target.value })
+              setFormData({
+                ...formData,
+                storeName: e.target.value,
+                storeDisplayName: e.target.value,
+              })
             }
           />
           <TextField

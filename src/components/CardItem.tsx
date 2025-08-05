@@ -25,6 +25,8 @@ interface CardItemProps {
 }
 
 export const CardItem = ({ card, onDelete, onClick }: CardItemProps) => {
+  const accentColor =
+    card.accentColor || generateColorFromString(card.storeName);
   return (
     <Card
       sx={{
@@ -41,7 +43,7 @@ export const CardItem = ({ card, onDelete, onClick }: CardItemProps) => {
           left: 0,
           right: 0,
           height: "4px",
-          backgroundColor: generateColorFromString(card.storeName),
+          backgroundColor: accentColor,
           borderTopLeftRadius: 8,
           borderTopRightRadius: 8,
         },
