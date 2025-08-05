@@ -47,7 +47,7 @@ export const AddCardForm = ({ open, onClose, onAdd }: AddCardFormProps) => {
   };
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+    <Dialog fullScreen open={open} onClose={onClose}>
       <DialogTitle>Add New Loyalty Card</DialogTitle>
       <DialogContent>
         <Stack spacing={2} justifyContent="center" marginTop="8px">
