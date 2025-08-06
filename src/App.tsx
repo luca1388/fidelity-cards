@@ -14,6 +14,7 @@ import { AddCardForm } from "./components/AddCardForm";
 import { CardItem } from "./components/CardItem";
 import { CardDetails } from "./components/CardDetails";
 import { stores } from "./utils/stores";
+import DeleteConfirmDialog from "./components/DeleteConfirmDialog";
 
 const theme = createTheme({
   palette: {
@@ -130,6 +131,7 @@ function App() {
   });
   const [isAddFormOpen, setIsAddFormOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState<LoyaltyCard | null>(null);
+  const [deleteCard, setDeleteCard] = useState<LoyaltyCard | null>(null);
 
   // Save cards to localStorage whenever they change (but not on initial load)
   useEffect(() => {
@@ -157,8 +159,17 @@ function App() {
     setCards([...cards, enrichedCard || newCard]);
   };
 
-  const handleDeleteCard = (id: string) => {
-    setCards(cards.filter((card) => card.id !== id));
+  const handleConfirmDeleteCard = (cardId: string) => {
+    const cardToDelete = cards.find((card) => card.id === cardId);
+
+    if (cardToDelete) {
+      setDeleteCard(cardToDelete);
+    }
+  };
+
+  const handleDeleteCard = () => {
+    setCards(cards.filter((card) => card.id !== deleteCard?.id));
+    setDeleteCard(null);
   };
 
   return (
@@ -204,7 +215,7 @@ function App() {
               <CardItem
                 key={card.id}
                 card={card}
-                onDelete={handleDeleteCard}
+                onDelete={handleConfirmDeleteCard}
                 onClick={() => setSelectedCard(card)}
               />
             ))}
@@ -278,6 +289,15 @@ function App() {
         <CardDetails
           card={selectedCard}
           onClose={() => setSelectedCard(null)}
+        />
+
+        <DeleteConfirmDialog
+          onOpen={Boolean(deleteCard)}
+          onClose={() => setDeleteCard(null)}
+          onDelete={handleDeleteCard}
+          storeDisplayName={
+            deleteCard?.storeDisplayName || deleteCard?.storeName || ""
+          }
         />
       </Container>
     </ThemeProvider>

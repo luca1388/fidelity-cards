@@ -132,7 +132,7 @@ export const CardDetails = ({ card, onClose }: CardDetailsProps) => {
               <Box sx={{ transform: "scale(1.2)" }}>
                 <Barcode value={card.cardNumber} />
               </Box>
-              <Typography
+              {/* <Typography
                 sx={{
                   fontSize: "1.2rem",
                   fontFamily: "monospace",
@@ -141,7 +141,7 @@ export const CardDetails = ({ card, onClose }: CardDetailsProps) => {
                 }}
               >
                 {card.cardNumber}
-              </Typography>
+              </Typography> */}
               <Box
                 sx={{
                   display: "flex",

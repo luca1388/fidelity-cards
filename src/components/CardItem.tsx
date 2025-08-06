@@ -90,7 +90,7 @@ export const CardItem = ({ card, onDelete, onClick }: CardItemProps) => {
                   mb: 0.5,
                 }}
               >
-                {card.storeName}
+                {card.storeDisplayName}
               </Typography>
               <Typography
                 variant="body2"
