@@ -12,6 +12,7 @@ import {
   ContentCopy as ContentCopyIcon,
 } from "@mui/icons-material";
 import type { LoyaltyCard } from "../types/types";
+import { useEffect, useRef } from "react";
 
 const generateColorFromString = (str: string) => {
   // Generate a hash from the string
@@ -36,6 +37,32 @@ interface CardDetailsProps {
 }
 
 export const CardDetails = ({ card, onClose }: CardDetailsProps) => {
+  const wakeLockRef = useRef<WakeLockSentinel | null>(null);
+
+  useEffect(() => {
+    const requestWakeLock = async () => {
+      try {
+        if ("wakeLock" in navigator) {
+          wakeLockRef.current = await navigator.wakeLock.request("screen");
+        }
+      } catch (err) {
+        console.warn("Wake Lock not available:", err);
+      }
+    };
+
+    if (card) {
+      requestWakeLock();
+    }
+
+    return () => {
+      // Rilascia il wake lock al chiudersi della card
+      if (wakeLockRef.current) {
+        wakeLockRef.current.release();
+        wakeLockRef.current = null;
+      }
+    };
+  }, [card]);
+
   if (!card) return null;
 
   return (
