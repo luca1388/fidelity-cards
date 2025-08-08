@@ -35,6 +35,11 @@ export default function BarcodeScanner({
         Html5QrcodeSupportedFormats.CODE_39,
         Html5QrcodeSupportedFormats.UPC_A,
       ],
+      videoConstraints: {
+        facingMode: { exact: "environment" }, // Forza l'uso della fotocamera posteriore
+        zoom: { ideal: 2 }, // Richiedi uno zoom ideale di 2x
+        focusMode: "continuous", // Tenta di mantenere la messa a fuoco costante
+      },
     };
 
     try {
@@ -116,25 +121,4 @@ export default function BarcodeScanner({
       </Container>
     </>
   );
-  //   return (
-  //     <Stack spacing={2}>
-  //       <TextField
-  //         label="Codice Tessera"
-  //         variant="outlined"
-  //         value={cardCode}
-  //         onChange={(e) => setCardCode(e.target.value)}
-  //         fullWidth
-  //       />
-  //       <Button
-  //         variant={scanning ? "contained" : "outlined"}
-  //         color={scanning ? "error" : "primary"}
-  //         startIcon={<ScannerIcon />}
-  //         onClick={scanning ? stopScanner : startScanner}
-  //       >
-  //         {scanning ? "Ferma Scansione" : "Scansiona Tessera"}
-  //       </Button>
-
-  //       <div id={SCANNER_ID} style={{ width: "100%", maxWidth: 400 }} />
-  //     </Stack>
-  //   );
 }
