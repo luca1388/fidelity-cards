@@ -6,6 +6,8 @@ import { AddCardForm } from "./components/AddCardForm";
 import { CardItem } from "./components/CardItem";
 import { CardDetails } from "./components/CardDetails";
 import { stores } from "./utils/stores";
+import { Fab } from "@mui/material";
+import { Add as AddIcon } from "@mui/icons-material";
 import DeleteConfirmDialog from "./components/DeleteConfirmDialog";
 
 import NoSearchResults from "./components/NoSearchResults";
@@ -75,13 +77,17 @@ function App() {
     );
   });
 
+  const handleAddNewCard = () => {
+    setIsAddFormOpen(true);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container maxWidth="sm">
         <Box py={4}>
           <Header
-            onAddNewCardHandler={() => setIsAddFormOpen(true)}
+            onAddNewCardHandler={handleAddNewCard}
             searchDisabled={cards.length === 0}
             onChangeSearchTerm={setSearchTerm}
             searchTerm={searchTerm}
@@ -114,6 +120,13 @@ function App() {
               <EmptyScreen onClickHandler={setIsAddFormOpen} />
             ))}
         </Box>
+        <Fab
+          color="primary"
+          aria-label="add"
+          sx={{ position: "fixed", bottom: 16, right: 16 }}
+        >
+          <AddIcon onClick={handleAddNewCard} />
+        </Fab>
 
         <AddCardForm
           open={isAddFormOpen}

@@ -1,13 +1,13 @@
 import {
   Box,
-  Button,
+  //   Button,
   IconButton,
   InputAdornment,
   TextField,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import SearchIcon from "@mui/icons-material/Search";
-import { Add as AddIcon } from "@mui/icons-material";
+// import { Add as AddIcon } from "@mui/icons-material";
 
 interface SearchBarProps {
   searchTerm: string;
@@ -20,7 +20,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   searchTerm,
   onChangeHandler,
   disabled,
-  onAddNewCardHandler,
+  //   onAddNewCardHandler,
 }) => {
   return (
     <Box
@@ -39,6 +39,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         value={searchTerm}
         onChange={(e) => onChangeHandler(e.target.value)}
         size="small"
+        fullWidth
         disabled={disabled}
         sx={{
           maxWidth: 400,
@@ -64,14 +65,14 @@ const SearchBar: React.FC<SearchBarProps> = ({
           ),
         }}
       />
-      <Button
+      {/* <Button
         variant="contained"
         startIcon={<AddIcon />}
         onClick={onAddNewCardHandler}
         sx={{ alignSelf: "flex-start" }}
       >
         Add New Card
-      </Button>
+      </Button> */}
     </Box>
   );
 };
