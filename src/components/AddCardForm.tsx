@@ -40,7 +40,8 @@ export const AddCardForm = ({ open, onClose, onAdd }: AddCardFormProps) => {
     }
   };
 
-  const onScanSuccess = (decodedText: string) => {
+  const onScanSuccess = (decodedText: string, result: any) => {
+    alert("Codice letto: " + JSON.stringify(result));
     setFormData((prev) => ({
       ...prev,
       cardNumber: decodedText,

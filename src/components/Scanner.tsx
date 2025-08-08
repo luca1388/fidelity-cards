@@ -18,7 +18,7 @@ const findBackCamera = (devices: CameraDevice[]) => {
 export default function BarcodeScanner({
   onSuccess,
 }: {
-  onSuccess: (code: string) => void;
+  onSuccess: (code: string, result: any) => void;
 }) {
   const [scanning, setScanning] = useState(false);
   const html5QrcodeRef = useRef<Html5Qrcode | null>(null);
@@ -48,9 +48,9 @@ export default function BarcodeScanner({
         await html5QrCode.start(
           cameraId,
           config,
-          (decodedText) => {
+          (decodedText, result) => {
             console.log("Barcode letto:", decodedText);
-            onSuccess(decodedText);
+            onSuccess(decodedText, result);
             stopScanner(); // ferma lo scanner
           },
           (_error) => {
