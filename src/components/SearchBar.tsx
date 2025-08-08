@@ -41,7 +41,6 @@ const SearchBar: React.FC<SearchBarProps> = ({
         size="small"
         disabled={disabled}
         sx={{
-          mb: 2,
           maxWidth: 400,
           backgroundColor: "#fff",
           borderRadius: 2,
