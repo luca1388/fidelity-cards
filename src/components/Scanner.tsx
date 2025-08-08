@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   Html5Qrcode,
-  Html5QrcodeSupportedFormats,
+  // Html5QrcodeSupportedFormats,
   type CameraDevice,
 } from "html5-qrcode";
 import { Button, Container } from "@mui/material";
@@ -29,12 +29,12 @@ export default function BarcodeScanner({
     const config = {
       fps: 10,
       qrbox: { width: 300, height: 100 },
-      formatsToSupport: [
-        Html5QrcodeSupportedFormats.EAN_13,
-        Html5QrcodeSupportedFormats.CODE_128,
-        Html5QrcodeSupportedFormats.CODE_39,
-        Html5QrcodeSupportedFormats.UPC_A,
-      ],
+      // formatsToSupport: [
+      //   Html5QrcodeSupportedFormats.EAN_13,
+      //   Html5QrcodeSupportedFormats.CODE_128,
+      //   Html5QrcodeSupportedFormats.CODE_39,
+      //   Html5QrcodeSupportedFormats.UPC_A,
+      // ],
     };
 
     try {
