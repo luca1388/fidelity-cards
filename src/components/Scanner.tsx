@@ -1,19 +1,18 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  Html5Qrcode,
-  Html5QrcodeSupportedFormats,
-  type CameraDevice,
-} from "html5-qrcode";
+import Quagga from "quagga";
+// Define QuaggaResult type inline if needed, or use 'any' as a fallback
+type QuaggaResult = {
+  codeResult?: {
+    code?: string;
+    format?: string;
+    [key: string]: any;
+  };
+  [key: string]: any;
+};
 import { Button, Container } from "@mui/material";
 import ScannerIcon from "@mui/icons-material/CenterFocusWeak";
 
-const SCANNER_ID = "custom-html5-qrcode";
-
-const findBackCamera = (devices: CameraDevice[]) => {
-  // Cerca per nome
-  const backCam = devices.find((d) => /back|rear|environment/i.test(d.label));
-  return backCam?.id || devices[1]?.id; // fallback alla seconda disponibile
-};
+const SCANNER_ID = "quagga-scanner";
 
 export default function BarcodeScanner({
   onSuccess,
@@ -21,76 +20,77 @@ export default function BarcodeScanner({
   onSuccess: (code: string, result: any) => void;
 }) {
   const [scanning, setScanning] = useState(false);
-  const html5QrcodeRef = useRef<Html5Qrcode | null>(null);
+  const scannerRef = useRef<HTMLDivElement | null>(null);
 
-  const startScanner = async () => {
-    if (scanning || html5QrcodeRef.current) return;
+  const startScanner = () => {
+    if (scanning) return;
 
-    const config = {
-      fps: 10,
-      qrbox: { width: 300, height: 100 },
-      formatsToSupport: [
-        Html5QrcodeSupportedFormats.EAN_13,
-        Html5QrcodeSupportedFormats.CODE_128,
-        Html5QrcodeSupportedFormats.CODE_39,
-        Html5QrcodeSupportedFormats.UPC_A,
-      ],
-      videoConstraints: {
-        facingMode: { exact: "environment" }, // Forza l'uso della fotocamera posteriore
-        zoom: { ideal: 2 }, // Richiedi uno zoom ideale di 2x
-        focusMode: "continuous", // Tenta di mantenere la messa a fuoco costante
-      },
-    };
-
-    try {
-      const html5QrCode = new Html5Qrcode(SCANNER_ID);
-      html5QrcodeRef.current = html5QrCode;
-
-      const devices = await Html5Qrcode.getCameras();
-      if (devices && devices.length) {
-        const cameraId = findBackCamera(devices) || devices[0].id;
-
-        await html5QrCode.start(
-          cameraId,
-          config,
-          (decodedText, result) => {
-            console.log("Barcode letto:", decodedText);
-            onSuccess(decodedText, result);
-            stopScanner(); // ferma lo scanner
+    Quagga.init(
+      {
+        inputStream: {
+          type: "LiveStream",
+          target: scannerRef.current,
+          constraints: {
+            facingMode: "environment", // use back camera
           },
-          (_error) => {
-            console.warn("Errore di scansione", _error);
-          }
-        );
-
+          area: {
+            top: "30%",
+            right: "10%",
+            left: "10%",
+            bottom: "30%",
+          },
+        },
+        decoder: {
+          readers: [
+            "ean_reader",
+            "ean_8_reader",
+            "code_128_reader",
+            "code_39_reader",
+            "upc_reader",
+          ],
+        },
+        locate: true,
+        numOfWorkers: 4,
+      },
+      (err) => {
+        if (err) {
+          console.error("Errore scanner:", err);
+          return;
+        }
+        console.log("Scanner inizializzato");
+        Quagga.start();
         setScanning(true);
-      } else {
-        alert("Nessuna fotocamera disponibile");
       }
-    } catch (err) {
-      console.error("Errore scanner:", err);
-    }
+    );
   };
 
-  const stopScanner = async () => {
-    if (html5QrcodeRef.current) {
-      try {
-        await html5QrcodeRef.current.stop();
-        await html5QrcodeRef.current.clear();
-      } catch (err) {
-        console.error("Errore durante lo stop:", err);
-      } finally {
-        html5QrcodeRef.current = null;
-        setScanning(false);
-      }
-    }
+  const stopScanner = () => {
+    if (!scanning) return;
+    Quagga.stop();
+    setScanning(false);
   };
 
   useEffect(() => {
-    return () => {
-      if (scanning) stopScanner();
+    if (!scanning) return;
+
+    const onDetected = (result: QuaggaResult) => {
+      if (result.codeResult && result.codeResult.code) {
+        console.log("Barcode letto:", result.codeResult.code);
+        console.log(result);
+        onSuccess(result.codeResult.code, result.codeResult.format);
+        stopScanner();
+      }
     };
-  }, [scanning]);
+
+    Quagga.onDetected(onDetected);
+
+    return () => {
+      Quagga.offDetected(onDetected);
+      if (scanning) {
+        stopScanner();
+      }
+    };
+  }, [scanning, onSuccess]);
 
   return (
     <>
@@ -109,15 +109,23 @@ export default function BarcodeScanner({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          mt: 2,
         }}
       >
         <div
+          ref={scannerRef}
           id={SCANNER_ID}
           style={{
             width: "100%",
             maxWidth: 400,
+            position: "relative",
+            overflow: "hidden",
+            maxHeight: scanning ? "300px" : "0",
+            transition: "max-height 0.3s ease-in-out",
           }}
-        />
+        >
+          <div style={{ position: "relative", zIndex: 1 }} />
+        </div>
       </Container>
     </>
   );

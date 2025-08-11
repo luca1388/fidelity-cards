@@ -13,6 +13,10 @@ import {
 } from "@mui/icons-material";
 import type { LoyaltyCard } from "../types/types";
 import { useEffect, useRef } from "react";
+import {
+  mapQuaggaFormatToReactBarcode,
+  type ReactCodeFormat,
+} from "../utils/barcodeFormat";
 
 const generateColorFromString = (str: string) => {
   // Generate a hash from the string
@@ -157,7 +161,14 @@ export const CardDetails = ({ card, onClose }: CardDetailsProps) => {
               }}
             >
               <Box sx={{ transform: "scale(1.2)" }}>
-                <Barcode value={card.cardNumber} />
+                <Barcode
+                  value={card.cardNumber}
+                  format={
+                    mapQuaggaFormatToReactBarcode(
+                      card.cardFormat || ""
+                    ) as ReactCodeFormat
+                  }
+                />
               </Box>
               {/* <Typography
                 sx={{

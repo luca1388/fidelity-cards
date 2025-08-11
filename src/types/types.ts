@@ -6,4 +6,5 @@ export interface LoyaltyCard {
   category?: string;
   accentColor?: string;
   image?: string;
+  cardFormat?: string;
 }

@@ -24,6 +24,7 @@ export const AddCardForm = ({ open, onClose, onAdd }: AddCardFormProps) => {
     storeName: "",
     storeDisplayName: "",
     cardNumber: "",
+    cardFormat: "",
   });
   const [showError, setShowError] = useState(false);
 
@@ -33,18 +34,24 @@ export const AddCardForm = ({ open, onClose, onAdd }: AddCardFormProps) => {
         id: Date.now().toString(),
         ...formData,
       });
-      setFormData({ storeName: "", cardNumber: "", storeDisplayName: "" });
+      setFormData({
+        storeName: "",
+        cardNumber: "",
+        storeDisplayName: "",
+        cardFormat: "",
+      });
       onClose();
     } else {
       setShowError(true);
     }
   };
 
-  const onScanSuccess = (decodedText: string, _result: any) => {
+  const onScanSuccess = (decodedText: string, format: string) => {
     // alert("Codice letto: " + JSON.stringify(result));
     setFormData((prev) => ({
       ...prev,
       cardNumber: decodedText,
+      cardFormat: format,
     }));
   };
 
